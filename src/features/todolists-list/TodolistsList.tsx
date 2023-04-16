@@ -2,12 +2,12 @@ import React, {useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 import {addTodolistTC, fetchTodolistsTC} from 'features/todolists-list/todolists.reducer'
 import {Grid, Paper} from '@mui/material'
-import {AddItemForm} from 'components/addItemForm/AddItemForm'
 import {Todolist} from './Todolist/Todolist'
 import {Navigate} from 'react-router-dom'
-import {useAppDispatch} from 'hooks/useAppDispatch';
+import {useAppDispatch} from 'common/hooks/useAppDispatch';
 import {selectIsLoggedIn} from "features/auth/auth.selectors";
 import {selectTodolists} from "features/todolists-list/todolists.selectors";
+import {AddItemForm} from "common/components";
 
 export const TodolistsList = () => {
 

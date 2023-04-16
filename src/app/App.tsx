@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react'
 import './App.css'
 import {TodolistsList} from 'features/todolists-list/TodolistsList'
-import {ErrorSnackbar} from 'components/errorSnackbar/ErrorSnackbar'
+import {ErrorSnackbar} from 'common/components/errorSnackbar/ErrorSnackbar'
 import {useSelector} from 'react-redux'
 import {initializeAppTC} from 'app/app.reducer'
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import {Menu} from '@mui/icons-material'
 import {selectIsLoggedIn} from "features/auth/auth.selectors";
-import {useAppDispatch} from "hooks/useAppDispatch";
+import {useAppDispatch} from "common/hooks/useAppDispatch";
 import {appSelectIsInitialized, appSelectStatus} from "app/app.selectors";
 
 type PropsType = {

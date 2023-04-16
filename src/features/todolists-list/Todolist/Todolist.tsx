@@ -1,26 +1,29 @@
 import React, {useEffect} from 'react'
-import {AddItemForm} from 'components/addItemForm/AddItemForm'
-import {EditableSpan} from 'components/editableSpan/EditableSpan'
 import {Task} from './Task/Task'
-import {TaskStatuses} from 'api/todolists-api'
+import {TaskStatuses} from 'common/api/todolists-api'
 import {
     changeTodolistTitleTC,
     removeTodolistTC,
     TodolistDomainType,
     todolistsActions
 } from 'features/todolists-list/todolists.reducer'
-import {addTaskTC, fetchTasksTC} from 'features/todolists-list/tasks.reducer'
-import {useAppDispatch} from 'hooks/useAppDispatch';
+import {tasksThunks} from 'features/todolists-list/tasks.reducer'
+import {useAppDispatch} from 'common/hooks/useAppDispatch';
 import {Button, IconButton} from '@mui/material'
 import {Delete} from '@mui/icons-material'
 import {useSelector} from "react-redux";
 import {selectTasks} from "features/todolists-list/tasks.selectors";
+import {AddItemForm, EditableSpan} from "common/components";
 
 type TodolistPropsType = {
     todolist: TodolistDomainType
 }
 
 export const Todolist = (props: TodolistPropsType) => {
+
+    useEffect(() => {
+        dispatch(tasksThunks.fetchTasks(props.todolist.id))
+    }, [])
 
     const dispatch = useAppDispatch()
     const tasksAll = useSelector(selectTasks)
@@ -34,12 +37,9 @@ export const Todolist = (props: TodolistPropsType) => {
         tasks = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
 
-    useEffect(() => {
-        dispatch(fetchTasksTC(props.todolist.id))
-    }, [])
 
     const addTask = (title: string) => {
-        dispatch(addTaskTC(title, props.todolist.id))
+        dispatch(tasksThunks.addTask({title, todolistId: props.todolist.id}))
     }
 
     const removeTodolist = () => {

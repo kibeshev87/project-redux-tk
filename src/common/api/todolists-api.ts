@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {UpdateDomainTaskModelType} from "features/todolists-list/tasks.reducer";
 
 const settings = {
     withCredentials: true,
@@ -28,11 +29,11 @@ export const todolistsAPI = {
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
     },
-    deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`);
+    deleteTask(arg: RemoveTaskArgType) {
+        return instance.delete<ResponseType>(`todo-lists/${arg.todolistId}/tasks/${arg.taskId}`);
     },
-    createTask(todolistId: string, taskTitile: string) {
-        return instance.post<ResponseType<{ item: TaskType}>>(`todo-lists/${todolistId}/tasks`, {title: taskTitile});
+    createTask(arg: AddTaskArgType) {
+        return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${arg.todolistId}/tasks`, {title: arg.title});
     },
     updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         return instance.put<ResponseType<TaskType>>(`todo-lists/${todolistId}/tasks/${taskId}`, model);
@@ -55,8 +56,8 @@ export const authAPI = {
         return instance.delete<ResponseType<{ userId?: number }>>('auth/login');
     },
     me() {
-       const promise =  instance.get<ResponseType<{id: number; email: string; login: string}>>('auth/me');
-       return promise
+        const promise = instance.get<ResponseType<{ id: number; email: string; login: string }>>('auth/me');
+        return promise
     }
 }
 
@@ -72,12 +73,19 @@ export type ResponseType<D = {}> = {
     messages: Array<string>
     data: D
 }
+
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
 }
+export const ResultCode = {
+    Success: 0,
+    Error: 1,
+    Captcha: 2,
+} as const
+
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,
@@ -85,6 +93,7 @@ export enum TaskPriorities {
     Urgently = 3,
     Later = 4
 }
+
 export type TaskType = {
     description: string
     title: string
@@ -109,4 +118,23 @@ type GetTasksResponse = {
     error: string | null
     totalCount: number
     items: TaskType[]
+}
+export type AddTaskArgType = {
+    title: string
+    todolistId: string
+}
+export type updateTodoTitleArgType = {
+    title: string
+    todolistId: string
+}
+
+export type RemoveTaskArgType = {
+    taskId: string
+    todolistId: string
+}
+
+export type UpdateTaskArgType = {
+    taskId: string
+    domainModel: UpdateDomainTaskModelType
+    todolistId: string
 }
